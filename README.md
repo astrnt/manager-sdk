@@ -59,7 +59,7 @@ check the version [here](https://github.com/astrnt/manager-sdk/releases)
 
     private void setUpSDK() {
         if (managerSDK == null) {
-            managerSDK = new ManagerSDK(this, BuildConfig.API_URL, BuildConfig.DEBUG);
+            managerSDK = new ManagerSDK(this, BuildConfig.API_URL, BuildConfig.DEBUG, BuildConfig.API_KEY);
         }
     }
 
