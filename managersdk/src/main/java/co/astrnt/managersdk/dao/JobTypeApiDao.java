@@ -3,7 +3,7 @@ package co.astrnt.managersdk.dao;
 /**
  * Created by deni rohimat on 23/07/18
  */
-public class IndustryApiDao {
+public class JobTypeApiDao {
 
     private int id;
     private String title;

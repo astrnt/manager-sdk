@@ -27,12 +27,15 @@ import java.util.Random;
 import co.astrnt.managersdk.core.MyObserver;
 import co.astrnt.managersdk.dao.AddJobApiDao;
 import co.astrnt.managersdk.dao.IndustryApiDao;
+import co.astrnt.managersdk.dao.JobTypeApiDao;
 import co.astrnt.managersdk.dao.ListIndustryApiDao;
+import co.astrnt.managersdk.dao.ListJobTypeApiDao;
 import co.astrnt.managersdk.repository.JobRepository;
 import co.astrnt.samplemanagersdk.BuildConfig;
 import co.astrnt.samplemanagersdk.R;
 import co.astrnt.samplemanagersdk.base.BaseActivity;
 import co.astrnt.samplemanagersdk.feature.adapter.IndustryAdapter;
+import co.astrnt.samplemanagersdk.feature.adapter.JobTypeAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -49,8 +52,11 @@ public class CreateJobActivity extends BaseActivity {
     private ProgressDialog progressDialog;
 
     private List<IndustryApiDao> industries = new ArrayList<>();
+    private List<JobTypeApiDao> jobTypes = new ArrayList<>();
     private IndustryAdapter industryAdapter;
+    private JobTypeAdapter jobTypeAdapter;
     private IndustryApiDao selectedIndustry;
+    private JobTypeApiDao selectedJobType;
 
     private String jobTitle, companyName, location, logoURL,
             deadline, description, responsibility, requirements,
@@ -89,6 +95,19 @@ public class CreateJobActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedIndustry = industryAdapter.getItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        jobTypeAdapter = new JobTypeAdapter(context, android.R.layout.simple_spinner_dropdown_item, jobTypes);
+        spnJobType.setAdapter(jobTypeAdapter);
+        spnJobType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedJobType = jobTypeAdapter.getItem(position);
             }
 
             @Override
@@ -144,6 +163,7 @@ public class CreateJobActivity extends BaseActivity {
                     @Override
                     public void onApiResultCompleted() {
                         progressDialog.dismiss();
+                        getJobTypeData();
                     }
 
                     @Override
@@ -161,6 +181,37 @@ public class CreateJobActivity extends BaseActivity {
                 });
     }
 
+    private void getJobTypeData() {
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        mJobRepository.getJobTypes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<ListJobTypeApiDao>() {
+
+                    @Override
+                    public void onApiResultCompleted() {
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onApiResultError(String message, String code) {
+                        Timber.e(message);
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onApiResultOk(ListJobTypeApiDao apiDao) {
+                        Timber.e(apiDao.getMessage());
+                        jobTypes = apiDao.getData();
+                        jobTypeAdapter.setData(jobTypes);
+                    }
+                });
+    }
+
     private void validateInput() {
 
         jobTitle = inpJobTitle.getText().toString();
@@ -171,7 +222,7 @@ public class CreateJobActivity extends BaseActivity {
         description = inpDescription.getText().toString();
         responsibility = inpResponsibility.getText().toString();
         requirements = inpRequirements.getText().toString();
-        jobType = spnJobType.getSelectedItem().toString();
+        jobType = String.valueOf(selectedJobType.getId());
         industryType = String.valueOf(selectedIndustry.getId());
 
         requireCV = "0";

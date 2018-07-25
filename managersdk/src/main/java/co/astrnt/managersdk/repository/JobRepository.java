@@ -7,6 +7,7 @@ import co.astrnt.managersdk.dao.AddJobApiDao;
 import co.astrnt.managersdk.dao.BaseApiDao;
 import co.astrnt.managersdk.dao.ListIndustryApiDao;
 import co.astrnt.managersdk.dao.ListJobApiDao;
+import co.astrnt.managersdk.dao.ListJobTypeApiDao;
 import io.reactivex.Observable;
 
 /**
@@ -69,6 +70,10 @@ public class JobRepository extends BaseRepository {
         map.put("api_key", managerSDK.getApiKey());
 
         return mAstronautApi.getApiService().listJob(map);
+    }
+
+    public Observable<ListJobTypeApiDao> getJobTypes() {
+        return mAstronautApi.getApiService().jobTypes();
     }
 
     public Observable<ListIndustryApiDao> getListIndustry() {

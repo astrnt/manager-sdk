@@ -8,6 +8,7 @@ import co.astrnt.managersdk.dao.DetailQuestionApiDao;
 import co.astrnt.managersdk.dao.ListCandidateApiDao;
 import co.astrnt.managersdk.dao.ListIndustryApiDao;
 import co.astrnt.managersdk.dao.ListJobApiDao;
+import co.astrnt.managersdk.dao.ListJobTypeApiDao;
 import co.astrnt.managersdk.dao.ListQuestionApiDao;
 import co.astrnt.managersdk.dao.VideoApiDao;
 import io.reactivex.Observable;
@@ -37,6 +38,9 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("job_list_get_jobs_properties")
     Observable<ListJobApiDao> listJob(@FieldMap HashMap<String, String> data);
+
+    @GET("astronaut_jobs_type")
+    Observable<ListJobTypeApiDao> jobTypes();
 
     //    INDUSTRY
     @GET("job_list_industries")
