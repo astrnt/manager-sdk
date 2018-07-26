@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class ListJobApiDao extends BaseApiDao {
 
-    private List<JobApiDao> job_list;
+    private List<JobApiDao> jobs_properties;
 
-    public List<JobApiDao> getJob_name() {
-        return job_list;
+    public List<JobApiDao> getJobs() {
+        return jobs_properties;
     }
 
-    public void setJob_name(List<JobApiDao> job_list) {
-        this.job_list = job_list;
+    public void setJobs(List<JobApiDao> jobs_properties) {
+        this.jobs_properties = jobs_properties;
     }
 }
