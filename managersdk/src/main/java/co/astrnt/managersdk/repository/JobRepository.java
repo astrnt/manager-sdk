@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import co.astrnt.managersdk.core.AstronautApi;
 import co.astrnt.managersdk.dao.AddJobApiDao;
+import co.astrnt.managersdk.dao.ApiKeyInfoApiDao;
 import co.astrnt.managersdk.dao.BaseApiDao;
 import co.astrnt.managersdk.dao.ListIndustryApiDao;
 import co.astrnt.managersdk.dao.ListJobApiDao;
@@ -18,6 +19,14 @@ public class JobRepository extends BaseRepository {
 
     public JobRepository(AstronautApi astronautApi) {
         mAstronautApi = astronautApi;
+    }
+
+    public Observable<ApiKeyInfoApiDao> getCompanyInfo() {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("api_key", managerSDK.getApiKey());
+
+        return mAstronautApi.getApiService().companyInfo(map);
     }
 
     public Observable<AddJobApiDao> createJob(

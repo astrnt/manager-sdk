@@ -3,6 +3,7 @@ package co.astrnt.managersdk;
 import java.util.HashMap;
 
 import co.astrnt.managersdk.dao.AddJobApiDao;
+import co.astrnt.managersdk.dao.ApiKeyInfoApiDao;
 import co.astrnt.managersdk.dao.BaseApiDao;
 import co.astrnt.managersdk.dao.DetailQuestionApiDao;
 import co.astrnt.managersdk.dao.ListCandidateApiDao;
@@ -21,6 +22,11 @@ import retrofit2.http.POST;
  * Created by deni rohimat on 23/07/18
  */
 public interface ApiService {
+
+    //    COMPANY INFO
+    @FormUrlEncoded
+    @POST("job_list_integration_company_info")
+    Observable<ApiKeyInfoApiDao> companyInfo(@FieldMap HashMap<String, String> data);
 
     //    JOB
     @FormUrlEncoded

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ import java.util.Random;
 
 import co.astrnt.managersdk.core.MyObserver;
 import co.astrnt.managersdk.dao.AddJobApiDao;
+import co.astrnt.managersdk.dao.ApiKeyInfoApiDao;
 import co.astrnt.managersdk.dao.IndustryApiDao;
 import co.astrnt.managersdk.dao.JobTypeApiDao;
 import co.astrnt.managersdk.dao.ListIndustryApiDao;
@@ -43,6 +45,7 @@ import timber.log.Timber;
 public class CreateJobActivity extends BaseActivity {
 
     private JobRepository mJobRepository;
+    private TextView txtCompanyName;
     private EditText inpJobTitle, inpCompanyName, inpLocation,
             inpLogoURL, inpDeadline, inpDescription,
             inpResponsibility, inpRequirements;
@@ -73,6 +76,7 @@ public class CreateJobActivity extends BaseActivity {
 
         setContentView(R.layout.activity_create_job);
 
+        txtCompanyName = findViewById(R.id.txt_company_name);
         inpJobTitle = findViewById(R.id.inp_job_title);
         inpCompanyName = findViewById(R.id.inp_company_name);
         inpLocation = findViewById(R.id.inp_location);
@@ -119,7 +123,7 @@ public class CreateJobActivity extends BaseActivity {
             generateDummyData();
         }
 
-        getIndustriesData();
+        getCompanyInfo();
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +153,37 @@ public class CreateJobActivity extends BaseActivity {
         inpRequirements.setText(q + " Requirements");
     }
 
+    private void getCompanyInfo() {
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        mJobRepository.getCompanyInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MyObserver<ApiKeyInfoApiDao>() {
+
+                    @Override
+                    public void onApiResultCompleted() {
+                        progressDialog.dismiss();
+                        getIndustriesData();
+                    }
+
+                    @Override
+                    public void onApiResultError(String message, String code) {
+                        Timber.e(message);
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onApiResultOk(ApiKeyInfoApiDao apiDao) {
+                        Timber.d(apiDao.getMessage());
+                        txtCompanyName.setText(apiDao.getCompany_info().getName());
+                    }
+                });
+    }
+
     private void getIndustriesData() {
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Loading...");
@@ -174,7 +209,7 @@ public class CreateJobActivity extends BaseActivity {
 
                     @Override
                     public void onApiResultOk(ListIndustryApiDao apiDao) {
-                        Timber.e(apiDao.getMessage());
+                        Timber.d(apiDao.getMessage());
                         industries = apiDao.getData();
                         industryAdapter.setData(industries);
                     }
@@ -205,7 +240,7 @@ public class CreateJobActivity extends BaseActivity {
 
                     @Override
                     public void onApiResultOk(ListJobTypeApiDao apiDao) {
-                        Timber.e(apiDao.getMessage());
+                        Timber.d(apiDao.getMessage());
                         jobTypes = apiDao.getData();
                         jobTypeAdapter.setData(jobTypes);
                     }
@@ -303,7 +338,6 @@ public class CreateJobActivity extends BaseActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 
 }
