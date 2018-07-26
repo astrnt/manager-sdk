@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,13 +29,14 @@ public class ListJobActivity extends BaseActivity {
 
     private JobRepository mJobRepository;
     private RecyclerView recyclerView;
+    private FloatingActionButton fabCreateJob;
     private JobAdapter jobAdapter;
     private ProgressDialog progressDialog;
 
     private List<JobApiDao> listJob = new ArrayList<>();
 
     public static void start(Context context) {
-        Intent intent = new Intent(context, CreateJobActivity.class);
+        Intent intent = new Intent(context, ListJobActivity.class);
         context.startActivity(intent);
     }
 
@@ -43,6 +46,7 @@ public class ListJobActivity extends BaseActivity {
         setContentView(R.layout.activity_list_job);
 
         recyclerView = findViewById(R.id.recycler_view);
+        fabCreateJob = findViewById(R.id.fab_create_job);
 
         mJobRepository = new JobRepository(getApi());
 
@@ -51,6 +55,12 @@ public class ListJobActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(jobAdapter);
 
+        fabCreateJob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateJobActivity.start(context);
+            }
+        });
         getData();
     }
 
