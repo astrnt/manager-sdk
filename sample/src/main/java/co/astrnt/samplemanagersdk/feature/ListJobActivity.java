@@ -68,6 +68,12 @@ public class ListJobActivity extends BaseActivity {
         getData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
+    }
+
     private void getData() {
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Loading...");

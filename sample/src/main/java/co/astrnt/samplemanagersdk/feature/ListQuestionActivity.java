@@ -71,9 +71,15 @@ public class ListQuestionActivity extends BaseActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                CreateJobActivity.start(context);
+                AddQuestionActivity.start(context, jobId);
             }
         });
+        getData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getData();
     }
 
