@@ -3,8 +3,9 @@ package co.astrnt.managersdk.dao;
 /**
  * Created by deni rohimat on 23/07/18
  */
-public class JobApiDao extends AddJobApiDao {
+public class JobApiDao {
 
+    private String job_identifier;
     private String job_name;
     private String locations;
     private String description;
@@ -14,6 +15,14 @@ public class JobApiDao extends AddJobApiDao {
     private String deadline;
     private int total_candidate;
     private String open_code;
+
+    public String getJob_identifier() {
+        return job_identifier;
+    }
+
+    public void setJob_identifier(String job_identifier) {
+        this.job_identifier = job_identifier;
+    }
 
     public String getJob_name() {
         return job_name;

@@ -74,6 +74,10 @@ public class CreateJobActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getSupportActionBar().setTitle("Create Job");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         setContentView(R.layout.activity_create_job);
 
         txtCompanyName = findViewById(R.id.txt_company_name);

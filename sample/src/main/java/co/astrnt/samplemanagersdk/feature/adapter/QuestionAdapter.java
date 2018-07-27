@@ -9,21 +9,20 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import co.astrnt.managersdk.dao.JobApiDao;
+import co.astrnt.managersdk.dao.QuestionApiDao;
 import co.astrnt.samplemanagersdk.R;
-import co.astrnt.samplemanagersdk.feature.ListQuestionActivity;
 
-public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ExampleViewHolder> {
+public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ExampleViewHolder> {
 
-    private List<JobApiDao> listData;
+    private List<QuestionApiDao> listData;
     private Context context;
 
-    public JobAdapter(Context context, List<JobApiDao> data) {
+    public QuestionAdapter(Context context, List<QuestionApiDao> data) {
         this.context = context;
         listData = data;
     }
 
-    public void setData(List<JobApiDao> data) {
+    public void setData(List<QuestionApiDao> data) {
         this.listData = data;
         notifyDataSetChanged();
     }
@@ -31,13 +30,13 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ExampleViewHolde
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_job, parent, false);
+                .inflate(R.layout.item_question, parent, false);
         return new ExampleViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
-        JobApiDao pokemon = this.listData.get(position);
+        QuestionApiDao pokemon = this.listData.get(position);
         holder.onBind(pokemon);
     }
 
@@ -48,27 +47,27 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ExampleViewHolde
 
     class ExampleViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtJobTitle;
-        private TextView txtJobType;
+        private TextView txtQuestionTitle;
+        private TextView txtTakeCountAndMaxTime;
 
-        private JobApiDao item;
+        private QuestionApiDao item;
 
         ExampleViewHolder(View itemView) {
             super(itemView);
-            txtJobTitle = itemView.findViewById(R.id.txt_job_title);
-            txtJobType = itemView.findViewById(R.id.txt_job_type);
+            txtQuestionTitle = itemView.findViewById(R.id.txt_question_title);
+            txtTakeCountAndMaxTime = itemView.findViewById(R.id.txt_takes_and_max_time);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ListQuestionActivity.start(context, item.getJob_identifier());
+//                    TODO: move to job detail
                 }
             });
         }
 
-        void onBind(JobApiDao item) {
+        void onBind(QuestionApiDao item) {
             this.item = item;
-            txtJobTitle.setText(item.getJob_name());
-            txtJobType.setText(item.getJob_type() + " - "  + item.getLocations());
+            txtQuestionTitle.setText(item.getTitle());
+            txtTakeCountAndMaxTime.setText(item.getMaxTime() + "s - "  + item.getTakesCount() + " attempt");
         }
     }
 }

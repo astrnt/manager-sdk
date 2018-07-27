@@ -17,28 +17,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.astrnt.managersdk.core.MyObserver;
-import co.astrnt.managersdk.dao.JobApiDao;
-import co.astrnt.managersdk.dao.ListJobApiDao;
-import co.astrnt.managersdk.repository.JobRepository;
+import co.astrnt.managersdk.dao.ListQuestionApiDao;
+import co.astrnt.managersdk.dao.QuestionApiDao;
+import co.astrnt.managersdk.repository.QuestionRepository;
 import co.astrnt.samplemanagersdk.R;
 import co.astrnt.samplemanagersdk.base.BaseActivity;
-import co.astrnt.samplemanagersdk.feature.adapter.JobAdapter;
+import co.astrnt.samplemanagersdk.feature.adapter.QuestionAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class ListJobActivity extends BaseActivity {
+public class ListQuestionActivity extends BaseActivity {
 
-    private JobRepository mJobRepository;
+    private static final String EXT_JOB_ID = "JOB_ID";
+    private QuestionRepository mQuestionRepository;
     private RecyclerView recyclerView;
-    private FloatingActionButton fabCreateJob;
-    private JobAdapter jobAdapter;
+    private FloatingActionButton fabAdd;
+    private QuestionAdapter questionAdapter;
     private ProgressDialog progressDialog;
 
-    private List<JobApiDao> listJob = new ArrayList<>();
+    private List<QuestionApiDao> listQuestion = new ArrayList<>();
+    private String jobId;
 
-    public static void start(Context context) {
-        Intent intent = new Intent(context, ListJobActivity.class);
+    public static void start(Context context, String jobId) {
+        Intent intent = new Intent(context, ListQuestionActivity.class);
+        intent.putExtra(EXT_JOB_ID, jobId);
         context.startActivity(intent);
     }
 
@@ -47,22 +50,28 @@ public class ListJobActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
 
+        getSupportActionBar().setTitle("List Question");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         recyclerView = findViewById(R.id.recycler_view);
-        fabCreateJob = findViewById(R.id.fab_add);
+        fabAdd = findViewById(R.id.fab_add);
 
-        mJobRepository = new JobRepository(getApi());
+        mQuestionRepository = new QuestionRepository(getApi());
 
-        jobAdapter = new JobAdapter(context, listJob);
+        questionAdapter = new QuestionAdapter(context, listQuestion);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(jobAdapter);
+        recyclerView.setAdapter(questionAdapter);
 
-        fabCreateJob.setOnClickListener(new View.OnClickListener() {
+        jobId = getIntent().getStringExtra(EXT_JOB_ID);
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateJobActivity.start(context);
+//                CreateJobActivity.start(context);
             }
         });
         getData();
@@ -74,10 +83,10 @@ public class ListJobActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mJobRepository.getListJob()
+        mQuestionRepository.getListQuestion(jobId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<ListJobApiDao>() {
+                .subscribe(new MyObserver<ListQuestionApiDao>() {
 
                     @Override
                     public void onApiResultCompleted() {
@@ -91,10 +100,10 @@ public class ListJobActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onApiResultOk(ListJobApiDao apiDao) {
+                    public void onApiResultOk(ListQuestionApiDao apiDao) {
                         Timber.d(apiDao.getMessage());
-                        listJob = apiDao.getJobs();
-                        jobAdapter.setData(listJob);
+                        listQuestion = apiDao.getQuestions();
+                        questionAdapter.setData(listQuestion);
                     }
                 });
     }
