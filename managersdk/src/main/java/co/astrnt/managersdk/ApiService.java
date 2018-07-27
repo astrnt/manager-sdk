@@ -3,6 +3,7 @@ package co.astrnt.managersdk;
 import java.util.HashMap;
 
 import co.astrnt.managersdk.dao.AddJobApiDao;
+import co.astrnt.managersdk.dao.AddQuestionApiDao;
 import co.astrnt.managersdk.dao.ApiKeyInfoApiDao;
 import co.astrnt.managersdk.dao.BaseApiDao;
 import co.astrnt.managersdk.dao.DetailQuestionApiDao;
@@ -76,7 +77,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("job_list_add_question")
-    Observable<BaseApiDao> addQuestion(@FieldMap HashMap<String, String> data);
+    Observable<AddQuestionApiDao> addQuestion(@FieldMap HashMap<String, String> data);
 
     @FormUrlEncoded
     @POST("job_list_delete_question")
