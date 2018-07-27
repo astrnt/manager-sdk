@@ -17,28 +17,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.astrnt.managersdk.core.MyObserver;
-import co.astrnt.managersdk.dao.JobApiDao;
-import co.astrnt.managersdk.dao.ListJobApiDao;
-import co.astrnt.managersdk.repository.JobRepository;
+import co.astrnt.managersdk.dao.CandidateApiDao;
+import co.astrnt.managersdk.dao.ListCandidateApiDao;
+import co.astrnt.managersdk.repository.CandidateRepository;
 import co.astrnt.samplemanagersdk.R;
 import co.astrnt.samplemanagersdk.base.BaseActivity;
-import co.astrnt.samplemanagersdk.feature.adapter.JobAdapter;
+import co.astrnt.samplemanagersdk.feature.adapter.CandidateAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class ListJobActivity extends BaseActivity {
+public class ListCandidateActivity extends BaseActivity {
 
-    private JobRepository mJobRepository;
+    private static final String EXT_JOB_ID = "JOB_ID";
+    private CandidateRepository mCandidateRepository;
     private RecyclerView recyclerView;
-    private FloatingActionButton fabCreateJob;
-    private JobAdapter jobAdapter;
+    private FloatingActionButton fabAdd;
+    private CandidateAdapter candidateAdapter;
     private ProgressDialog progressDialog;
 
-    private List<JobApiDao> listJob = new ArrayList<>();
+    private List<CandidateApiDao> listCandidate = new ArrayList<>();
+    private String jobId;
 
-    public static void start(Context context) {
-        Intent intent = new Intent(context, ListJobActivity.class);
+    public static void start(Context context, String jobId) {
+        Intent intent = new Intent(context, ListCandidateActivity.class);
+        intent.putExtra(EXT_JOB_ID, jobId);
         context.startActivity(intent);
     }
 
@@ -47,24 +50,25 @@ public class ListJobActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
 
+        getSupportActionBar().setTitle("List Candidate");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         recyclerView = findViewById(R.id.recycler_view);
-        fabCreateJob = findViewById(R.id.fab_add);
+        fabAdd = findViewById(R.id.fab_add);
 
-        mJobRepository = new JobRepository(getApi());
+        mCandidateRepository = new CandidateRepository(getApi());
 
-        jobAdapter = new JobAdapter(context, listJob);
+        candidateAdapter = new CandidateAdapter(context, listCandidate);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(jobAdapter);
+        recyclerView.setAdapter(candidateAdapter);
 
-        fabCreateJob.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CreateJobActivity.start(context);
-            }
-        });
+        jobId = getIntent().getStringExtra(EXT_JOB_ID);
+
+        fabAdd.setVisibility(View.GONE);
         getData();
     }
 
@@ -74,10 +78,10 @@ public class ListJobActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mJobRepository.getListJob()
+        mCandidateRepository.getListCandidate(jobId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<ListJobApiDao>() {
+                .subscribe(new MyObserver<ListCandidateApiDao>() {
 
                     @Override
                     public void onApiResultCompleted() {
@@ -91,10 +95,10 @@ public class ListJobActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onApiResultOk(ListJobApiDao apiDao) {
+                    public void onApiResultOk(ListCandidateApiDao apiDao) {
                         Timber.d(apiDao.getMessage());
-                        listJob = apiDao.getJobs();
-                        jobAdapter.setData(listJob);
+                        listCandidate = apiDao.getCandidates();
+                        candidateAdapter.setData(listCandidate);
                     }
                 });
     }

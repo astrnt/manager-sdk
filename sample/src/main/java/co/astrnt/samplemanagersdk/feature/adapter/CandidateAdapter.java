@@ -9,21 +9,20 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import co.astrnt.managersdk.dao.JobApiDao;
+import co.astrnt.managersdk.dao.CandidateApiDao;
 import co.astrnt.samplemanagersdk.R;
-import co.astrnt.samplemanagersdk.feature.ListCandidateActivity;
 
-public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ExampleViewHolder> {
+public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.ExampleViewHolder> {
 
-    private List<JobApiDao> listData;
+    private List<CandidateApiDao> listData;
     private Context context;
 
-    public JobAdapter(Context context, List<JobApiDao> data) {
+    public CandidateAdapter(Context context, List<CandidateApiDao> data) {
         this.context = context;
         listData = data;
     }
 
-    public void setData(List<JobApiDao> data) {
+    public void setData(List<CandidateApiDao> data) {
         this.listData = data;
         notifyDataSetChanged();
     }
@@ -31,13 +30,13 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ExampleViewHolde
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_job, parent, false);
+                .inflate(R.layout.item_candidate, parent, false);
         return new ExampleViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
-        JobApiDao pokemon = this.listData.get(position);
+        CandidateApiDao pokemon = this.listData.get(position);
         holder.onBind(pokemon);
     }
 
@@ -48,27 +47,27 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ExampleViewHolde
 
     class ExampleViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtJobTitle;
-        private TextView txtJobType;
+        private TextView txtCandidateName;
+        private TextView txtEmail;
 
-        private JobApiDao item;
+        private CandidateApiDao item;
 
         ExampleViewHolder(View itemView) {
             super(itemView);
-            txtJobTitle = itemView.findViewById(R.id.txt_job_title);
-            txtJobType = itemView.findViewById(R.id.txt_job_type);
+            txtCandidateName = itemView.findViewById(R.id.txt_candidate_name);
+            txtEmail = itemView.findViewById(R.id.txt_email);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ListCandidateActivity.start(context, item.getJob_identifier());
+//                    ListQuestionActivity.start(context, item.getJob_identifier());
                 }
             });
         }
 
-        void onBind(JobApiDao item) {
+        void onBind(CandidateApiDao item) {
             this.item = item;
-            txtJobTitle.setText(item.getJob_name());
-            txtJobType.setText(item.getJob_type() + " - "  + item.getLocations());
+            txtCandidateName.setText(item.getName());
+            txtEmail.setText(item.getEmail());
         }
     }
 }

@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class ListCandidateApiDao extends BaseApiDao {
 
-    private List<CandidatApiDao> candidates;
+    private List<CandidateApiDao> candidates;
 
-    public List<CandidatApiDao> getCandidates() {
+    public List<CandidateApiDao> getCandidates() {
         return candidates;
     }
 
-    public void setCandidates(List<CandidatApiDao> candidates) {
+    public void setCandidates(List<CandidateApiDao> candidates) {
         this.candidates = candidates;
     }
 }
