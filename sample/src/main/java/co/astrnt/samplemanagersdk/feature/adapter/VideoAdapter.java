@@ -14,6 +14,7 @@ import java.util.List;
 
 import co.astrnt.managersdk.dao.VideoApiDao;
 import co.astrnt.samplemanagersdk.R;
+import co.astrnt.samplemanagersdk.feature.VideoPreviewActivity;
 
 public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ExampleViewHolder> {
 
@@ -62,7 +63,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ExampleViewH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    TODO: move to video preview
+                    VideoPreviewActivity.start(context, item.getQuestion_title(), item.getVideo_url());
                 }
             });
         }

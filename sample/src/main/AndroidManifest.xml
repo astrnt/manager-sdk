@@ -44,6 +44,10 @@
             android:name=".feature.ListVideoActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
+        <activity
+            android:name=".feature.VideoPreviewActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
 
     </application>
 
