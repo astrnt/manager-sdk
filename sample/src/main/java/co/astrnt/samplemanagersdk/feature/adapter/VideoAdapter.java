@@ -5,27 +5,27 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import co.astrnt.managersdk.dao.CandidateApiDao;
+import co.astrnt.managersdk.dao.VideoApiDao;
 import co.astrnt.samplemanagersdk.R;
-import co.astrnt.samplemanagersdk.feature.ListVideoActivity;
 
-public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.ExampleViewHolder> {
+public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.ExampleViewHolder> {
 
-    private List<CandidateApiDao> listData;
+    private List<VideoApiDao> listData;
     private Context context;
-    private String jobId;
 
-    public CandidateAdapter(Context context, String jobId, List<CandidateApiDao> data) {
+    public VideoAdapter(Context context, List<VideoApiDao> data) {
         this.context = context;
-        this.jobId = jobId;
         listData = data;
     }
 
-    public void setData(List<CandidateApiDao> data) {
+    public void setData(List<VideoApiDao> data) {
         this.listData = data;
         notifyDataSetChanged();
     }
@@ -33,13 +33,13 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Exam
     @Override
     public ExampleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_candidate, parent, false);
+                .inflate(R.layout.item_video, parent, false);
         return new ExampleViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ExampleViewHolder holder, int position) {
-        CandidateApiDao pokemon = this.listData.get(position);
+        VideoApiDao pokemon = this.listData.get(position);
         holder.onBind(pokemon);
     }
 
@@ -50,27 +50,32 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Exam
 
     class ExampleViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtCandidateName;
-        private TextView txtEmail;
+        private TextView txtQuestionTitle;
+        private ImageView imgThumbnail;
 
-        private CandidateApiDao item;
+        private VideoApiDao item;
 
         ExampleViewHolder(View itemView) {
             super(itemView);
-            txtCandidateName = itemView.findViewById(R.id.txt_candidate_name);
-            txtEmail = itemView.findViewById(R.id.txt_email);
+            imgThumbnail = itemView.findViewById(R.id.img_thumbnail);
+            txtQuestionTitle = itemView.findViewById(R.id.txt_question_title);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ListVideoActivity.start(context, jobId, item.getCandidate_identifier());
+//                    TODO: move to video preview
                 }
             });
         }
 
-        void onBind(CandidateApiDao item) {
+        void onBind(VideoApiDao item) {
             this.item = item;
-            txtCandidateName.setText(item.getName());
-            txtEmail.setText(item.getEmail());
+            txtQuestionTitle.setText(item.getQuestion_title());
+            Picasso.get().load(item.getThumbnail_url())
+                    .resize(75, 75)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_broken_image_black_24dp)
+                    .error(R.drawable.ic_broken_image_black_24dp)
+                    .into(imgThumbnail);
         }
     }
 }

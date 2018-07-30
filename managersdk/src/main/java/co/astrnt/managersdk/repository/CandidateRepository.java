@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import co.astrnt.managersdk.core.AstronautApi;
 import co.astrnt.managersdk.dao.ListCandidateApiDao;
-import co.astrnt.managersdk.dao.VideoApiDao;
+import co.astrnt.managersdk.dao.ResponseVideoApiDao;
 import io.reactivex.Observable;
 
 /**
@@ -28,7 +28,7 @@ public class CandidateRepository extends BaseRepository {
         return mAstronautApi.getApiService().listCandidate(map);
     }
 
-    public Observable<VideoApiDao> getListVideos(String jobId, String candidateId) {
+    public Observable<ResponseVideoApiDao> getListVideos(String jobId, String candidateId) {
 
         HashMap<String, String> map = new HashMap<>();
         map.put("api_key", managerSDK.getApiKey());

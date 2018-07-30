@@ -12,7 +12,7 @@ import co.astrnt.managersdk.dao.ListIndustryApiDao;
 import co.astrnt.managersdk.dao.ListJobApiDao;
 import co.astrnt.managersdk.dao.ListJobTypeApiDao;
 import co.astrnt.managersdk.dao.ListQuestionApiDao;
-import co.astrnt.managersdk.dao.VideoApiDao;
+import co.astrnt.managersdk.dao.ResponseVideoApiDao;
 import io.reactivex.Observable;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -59,8 +59,8 @@ public interface ApiService {
     Observable<ListCandidateApiDao> listCandidate(@FieldMap HashMap<String, String> data);
 
     @FormUrlEncoded
-    @POST("job_list_get_videos")
-    Observable<VideoApiDao> listVideos(@FieldMap HashMap<String, String> data);
+    @POST("job_list_get_videos_with_attribute")
+    Observable<ResponseVideoApiDao> listVideos(@FieldMap HashMap<String, String> data);
 
     //    QUESTION
     @FormUrlEncoded

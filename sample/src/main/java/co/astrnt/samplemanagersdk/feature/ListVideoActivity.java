@@ -17,31 +17,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.astrnt.managersdk.core.MyObserver;
-import co.astrnt.managersdk.dao.CandidateApiDao;
-import co.astrnt.managersdk.dao.ListCandidateApiDao;
+import co.astrnt.managersdk.dao.ResponseVideoApiDao;
+import co.astrnt.managersdk.dao.VideoApiDao;
 import co.astrnt.managersdk.repository.CandidateRepository;
 import co.astrnt.samplemanagersdk.R;
 import co.astrnt.samplemanagersdk.base.BaseActivity;
-import co.astrnt.samplemanagersdk.feature.adapter.CandidateAdapter;
+import co.astrnt.samplemanagersdk.feature.adapter.VideoAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class ListCandidateActivity extends BaseActivity {
+public class ListVideoActivity extends BaseActivity {
 
     private static final String EXT_JOB_ID = "JOB_ID";
+    private static final String EXT_CANDIDATE_ID = "CANDIDATE_ID";
     private CandidateRepository mCandidateRepository;
     private RecyclerView recyclerView;
     private FloatingActionButton fabAdd;
-    private CandidateAdapter candidateAdapter;
+    private VideoAdapter videoAdapter;
     private ProgressDialog progressDialog;
 
-    private List<CandidateApiDao> listCandidate = new ArrayList<>();
-    private String jobId;
+    private List<VideoApiDao> listVideos = new ArrayList<>();
+    private String jobId, candidateId;
 
-    public static void start(Context context, String jobId) {
-        Intent intent = new Intent(context, ListCandidateActivity.class);
+    public static void start(Context context, String jobId, String candidateId) {
+        Intent intent = new Intent(context, ListVideoActivity.class);
         intent.putExtra(EXT_JOB_ID, jobId);
+        intent.putExtra(EXT_CANDIDATE_ID, candidateId);
         context.startActivity(intent);
     }
 
@@ -50,23 +52,24 @@ public class ListCandidateActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
 
-        getSupportActionBar().setTitle("List Candidate");
+        getSupportActionBar().setTitle("List Video");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         recyclerView = findViewById(R.id.recycler_view);
         fabAdd = findViewById(R.id.fab_add);
 
-        jobId = getIntent().getStringExtra(EXT_JOB_ID);
-
         mCandidateRepository = new CandidateRepository(getApi());
 
-        candidateAdapter = new CandidateAdapter(context, jobId, listCandidate);
+        videoAdapter = new VideoAdapter(context, listVideos);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(candidateAdapter);
+        recyclerView.setAdapter(videoAdapter);
+
+        jobId = getIntent().getStringExtra(EXT_JOB_ID);
+        candidateId = getIntent().getStringExtra(EXT_CANDIDATE_ID);
 
         fabAdd.setVisibility(View.GONE);
         getData();
@@ -78,10 +81,10 @@ public class ListCandidateActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mCandidateRepository.getListCandidate(jobId)
+        mCandidateRepository.getListVideos(jobId, candidateId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<ListCandidateApiDao>() {
+                .subscribe(new MyObserver<ResponseVideoApiDao>() {
 
                     @Override
                     public void onApiResultCompleted() {
@@ -95,10 +98,10 @@ public class ListCandidateActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onApiResultOk(ListCandidateApiDao apiDao) {
+                    public void onApiResultOk(ResponseVideoApiDao apiDao) {
                         Timber.d(apiDao.getMessage());
-                        listCandidate = apiDao.getCandidates();
-                        candidateAdapter.setData(listCandidate);
+                        listVideos = apiDao.getVideos();
+                        videoAdapter.setData(listVideos);
                     }
                 });
     }

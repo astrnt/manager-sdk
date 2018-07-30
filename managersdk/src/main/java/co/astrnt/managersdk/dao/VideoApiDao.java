@@ -1,37 +1,35 @@
 package co.astrnt.managersdk.dao;
 
-import java.util.List;
-
 /**
- * Created by deni rohimat on 23/07/18
+ * Created by deni rohimat on 30/07/18
  */
 public class VideoApiDao extends BaseApiDao {
 
-    private List<String> videos;
-    private List<String> thumbnails;
-    private List<String> questions_identifier;
+    private String thumbnail_url;
+    private String video_url;
+    private String question_title;
 
-    public List<String> getVideos() {
-        return videos;
+    public String getThumbnail_url() {
+        return thumbnail_url;
     }
 
-    public void setVideos(List<String> videos) {
-        this.videos = videos;
+    public void setThumbnail_url(String thumbnail_url) {
+        this.thumbnail_url = thumbnail_url;
     }
 
-    public List<String> getThumbnails() {
-        return thumbnails;
+    public String getVideo_url() {
+        return video_url;
     }
 
-    public void setThumbnails(List<String> thumbnails) {
-        this.thumbnails = thumbnails;
+    public void setVideo_url(String video_url) {
+        this.video_url = video_url;
     }
 
-    public List<String> getQuestions_identifier() {
-        return questions_identifier;
+    public String getQuestion_title() {
+        return question_title;
     }
 
-    public void setQuestions_identifier(List<String> questions_identifier) {
-        this.questions_identifier = questions_identifier;
+    public void setQuestion_title(String question_title) {
+        this.question_title = question_title;
     }
 }
