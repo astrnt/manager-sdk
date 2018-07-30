@@ -29,6 +29,11 @@ public class VideoPreviewActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setTitle("Video Preview");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         setContentView(R.layout.activity_video_preview);
 
         String questionTitle = getIntent().getStringExtra(EXT_QUESTION_TITLE);

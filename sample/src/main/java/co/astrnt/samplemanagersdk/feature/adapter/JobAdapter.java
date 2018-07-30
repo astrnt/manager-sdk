@@ -11,7 +11,7 @@ import java.util.List;
 
 import co.astrnt.managersdk.dao.JobApiDao;
 import co.astrnt.samplemanagersdk.R;
-import co.astrnt.samplemanagersdk.feature.ListCandidateActivity;
+import co.astrnt.samplemanagersdk.feature.DetailJobActivity;
 
 public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ExampleViewHolder> {
 
@@ -60,7 +60,7 @@ public class JobAdapter extends RecyclerView.Adapter<JobAdapter.ExampleViewHolde
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ListCandidateActivity.start(context, item.getJob_identifier());
+                    DetailJobActivity.start(context, item);
                 }
             });
         }
