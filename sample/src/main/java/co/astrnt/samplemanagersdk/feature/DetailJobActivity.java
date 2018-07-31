@@ -127,7 +127,7 @@ public class DetailJobActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_update:
-//                TODO: move to update job
+                UpdateJobActivity.start(context, jobApiDao);
                 break;
             case R.id.btn_delete:
                 deleteJob();

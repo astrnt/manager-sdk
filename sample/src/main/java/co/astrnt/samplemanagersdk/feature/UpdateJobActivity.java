@@ -12,29 +12,28 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import co.astrnt.managersdk.core.MyObserver;
-import co.astrnt.managersdk.dao.AddQuestionApiDao;
+import co.astrnt.managersdk.dao.BaseApiDao;
 import co.astrnt.managersdk.dao.JobApiDao;
-import co.astrnt.managersdk.repository.QuestionRepository;
+import co.astrnt.managersdk.repository.JobRepository;
 import co.astrnt.samplemanagersdk.R;
 import co.astrnt.samplemanagersdk.base.BaseActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class AddQuestionActivity extends BaseActivity {
+public class UpdateJobActivity extends BaseActivity {
 
     private static final String EXT_DATA = "EXT_DATA";
-    private QuestionRepository mQuestionRepository;
-    private EditText inpQuestionTitle, inpTakesCount;
+    private JobRepository mJobRepository;
+    private EditText inpJobTitle;
     private Button btnSubmit;
     private ProgressDialog progressDialog;
 
     private JobApiDao jobApiDao;
-    private String questionTitle;
-    private int takesCount;
+    private String jobTitle;
 
     public static void start(Context context, JobApiDao jobApiDao) {
-        Intent intent = new Intent(context, AddQuestionActivity.class);
+        Intent intent = new Intent(context, UpdateJobActivity.class);
         intent.putExtra(EXT_DATA, jobApiDao);
         context.startActivity(intent);
     }
@@ -43,19 +42,20 @@ public class AddQuestionActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setTitle("Add Question");
+        getSupportActionBar().setTitle("Update Job");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        setContentView(R.layout.activity_add_question);
+        setContentView(R.layout.activity_update_job);
 
-        inpQuestionTitle = findViewById(R.id.inp_question_title);
-        inpTakesCount = findViewById(R.id.inp_takes_count);
+        inpJobTitle = findViewById(R.id.inp_job_title);
         btnSubmit = findViewById(R.id.btn_submit);
 
-        mQuestionRepository = new QuestionRepository(getApi());
+        mJobRepository = new JobRepository(getApi());
 
         jobApiDao = getIntent().getParcelableExtra(EXT_DATA);
+
+        showInfo();
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,24 +65,19 @@ public class AddQuestionActivity extends BaseActivity {
         });
     }
 
+    private void showInfo() {
+        inpJobTitle.setText(jobApiDao.getJob_name());
+    }
 
     private void validateInput() {
 
-        questionTitle = inpQuestionTitle.getText().toString();
-        String takesCountStr = inpTakesCount.getText().toString();
+        jobTitle = inpJobTitle.getText().toString();
 
-        if (TextUtils.isEmpty(questionTitle)) {
-            inpQuestionTitle.setError("Question Title is required");
-            inpQuestionTitle.requestFocus();
+        if (TextUtils.isEmpty(jobTitle)) {
+            inpJobTitle.setError("Question Title is required");
+            inpJobTitle.requestFocus();
             return;
         }
-        if (TextUtils.isEmpty(takesCountStr)) {
-            inpTakesCount.setError("Takes Count is required");
-            inpTakesCount.requestFocus();
-            return;
-        }
-
-        takesCount = Integer.valueOf(takesCountStr);
 
         createJob();
     }
@@ -93,10 +88,10 @@ public class AddQuestionActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mQuestionRepository.addQuestion(jobApiDao.getJob_identifier(), questionTitle, takesCount)
+        mJobRepository.editJob(jobApiDao.getJob_identifier(), jobTitle)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<AddQuestionApiDao>() {
+                .subscribe(new MyObserver<BaseApiDao>() {
                     @Override
                     public void onApiResultCompleted() {
                         progressDialog.dismiss();
@@ -109,10 +104,10 @@ public class AddQuestionActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onApiResultOk(AddQuestionApiDao apiDao) {
+                    public void onApiResultOk(BaseApiDao apiDao) {
                         Timber.d(apiDao.getMessage());
                         Toast.makeText(context,
-                                "Success Add Question, Question id : " + apiDao.getQuestion_identifier(),
+                                "Success Update Job",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });

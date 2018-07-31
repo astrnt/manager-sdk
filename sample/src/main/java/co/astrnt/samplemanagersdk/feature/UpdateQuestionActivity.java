@@ -87,7 +87,7 @@ public class UpdateQuestionActivity extends BaseActivity {
             inpQuestionTitle.requestFocus();
             return;
         }
-        if (TextUtils.isEmpty(questionTitle)) {
+        if (TextUtils.isEmpty(takesCountStr)) {
             inpTakesCount.setError("Takes Count is required");
             inpTakesCount.requestFocus();
             return;

@@ -23,7 +23,7 @@
         <EditText
             android:id="@+id/inp_question_title"
             style="@style/RegisterInputStyle"
-            android:hint="Job Title"
+            android:hint="Question Title"
             android:imeOptions="actionNext"
             android:inputType="text"/>
 

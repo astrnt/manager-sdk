@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true"
-    tools:context=".feature.CreateJobActivity">
+    tools:context=".feature.UpdateQuestionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="40dp"
             android:layout_marginTop="30dp"
-            android:text="Edit Question"
+            android:text="Update Question"
             android:textStyle="bold"/>
     </LinearLayout>
 </ScrollView>

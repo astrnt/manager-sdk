@@ -253,6 +253,8 @@ public class CreateJobActivity extends BaseActivity {
 
     private void validateInput() {
 
+//        TODO: deadline with date time picker
+
         jobTitle = inpJobTitle.getText().toString();
         companyName = inpCompanyName.getText().toString();
         location = inpLocation.getText().toString();
