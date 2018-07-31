@@ -18,6 +18,7 @@ import java.util.List;
 
 import co.astrnt.managersdk.core.MyObserver;
 import co.astrnt.managersdk.dao.CandidateApiDao;
+import co.astrnt.managersdk.dao.JobApiDao;
 import co.astrnt.managersdk.dao.ListCandidateApiDao;
 import co.astrnt.managersdk.repository.CandidateRepository;
 import co.astrnt.samplemanagersdk.R;
@@ -29,7 +30,7 @@ import timber.log.Timber;
 
 public class ListCandidateActivity extends BaseActivity {
 
-    private static final String EXT_JOB_ID = "JOB_ID";
+    private static final String EXT_DATA = "EXT_DATA";
     private CandidateRepository mCandidateRepository;
     private RecyclerView recyclerView;
     private FloatingActionButton fabAdd;
@@ -37,11 +38,11 @@ public class ListCandidateActivity extends BaseActivity {
     private ProgressDialog progressDialog;
 
     private List<CandidateApiDao> listCandidate = new ArrayList<>();
-    private String jobId;
+    private JobApiDao jobApiDao;
 
-    public static void start(Context context, String jobId) {
+    public static void start(Context context, JobApiDao jobApiDao) {
         Intent intent = new Intent(context, ListCandidateActivity.class);
-        intent.putExtra(EXT_JOB_ID, jobId);
+        intent.putExtra(EXT_DATA, jobApiDao);
         context.startActivity(intent);
     }
 
@@ -57,11 +58,11 @@ public class ListCandidateActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recycler_view);
         fabAdd = findViewById(R.id.fab_add);
 
-        jobId = getIntent().getStringExtra(EXT_JOB_ID);
+        jobApiDao = getIntent().getParcelableExtra(EXT_DATA);
 
         mCandidateRepository = new CandidateRepository(getApi());
 
-        candidateAdapter = new CandidateAdapter(context, jobId, listCandidate);
+        candidateAdapter = new CandidateAdapter(context, jobApiDao, listCandidate);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL);
         recyclerView.addItemDecoration(decoration);
@@ -78,7 +79,7 @@ public class ListCandidateActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mCandidateRepository.getListCandidate(jobId)
+        mCandidateRepository.getListCandidate(jobApiDao.getJob_identifier())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<ListCandidateApiDao>() {

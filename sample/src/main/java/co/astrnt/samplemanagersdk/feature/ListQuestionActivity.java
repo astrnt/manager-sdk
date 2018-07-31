@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.astrnt.managersdk.core.MyObserver;
+import co.astrnt.managersdk.dao.JobApiDao;
 import co.astrnt.managersdk.dao.ListQuestionApiDao;
 import co.astrnt.managersdk.dao.QuestionApiDao;
 import co.astrnt.managersdk.repository.QuestionRepository;
@@ -29,7 +30,7 @@ import timber.log.Timber;
 
 public class ListQuestionActivity extends BaseActivity {
 
-    private static final String EXT_JOB_ID = "JOB_ID";
+    private static final String EXT_DATA = "EXT_DATA";
     private QuestionRepository mQuestionRepository;
     private RecyclerView recyclerView;
     private FloatingActionButton fabAdd;
@@ -37,11 +38,11 @@ public class ListQuestionActivity extends BaseActivity {
     private ProgressDialog progressDialog;
 
     private List<QuestionApiDao> listQuestion = new ArrayList<>();
-    private String jobId;
+    private JobApiDao jobApiDao;
 
-    public static void start(Context context, String jobId) {
+    public static void start(Context context, JobApiDao jobApiDao) {
         Intent intent = new Intent(context, ListQuestionActivity.class);
-        intent.putExtra(EXT_JOB_ID, jobId);
+        intent.putExtra(EXT_DATA, jobApiDao);
         context.startActivity(intent);
     }
 
@@ -58,20 +59,19 @@ public class ListQuestionActivity extends BaseActivity {
         fabAdd = findViewById(R.id.fab_add);
 
         mQuestionRepository = new QuestionRepository(getApi());
+        jobApiDao = getIntent().getParcelableExtra(EXT_DATA);
 
-        questionAdapter = new QuestionAdapter(context, listQuestion);
+        questionAdapter = new QuestionAdapter(context, jobApiDao, listQuestion);
 
         DividerItemDecoration decoration = new DividerItemDecoration(getApplicationContext(), LinearLayout.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(questionAdapter);
 
-        jobId = getIntent().getStringExtra(EXT_JOB_ID);
-
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddQuestionActivity.start(context, jobId);
+                AddQuestionActivity.start(context, jobApiDao);
             }
         });
         getData();
@@ -83,7 +83,7 @@ public class ListQuestionActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mQuestionRepository.getListQuestion(jobId)
+        mQuestionRepository.getListQuestion(jobApiDao.getJob_identifier())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<ListQuestionApiDao>() {

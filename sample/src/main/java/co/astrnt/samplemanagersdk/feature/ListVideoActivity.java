@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.astrnt.managersdk.core.MyObserver;
+import co.astrnt.managersdk.dao.JobApiDao;
 import co.astrnt.managersdk.dao.ResponseVideoApiDao;
 import co.astrnt.managersdk.dao.VideoApiDao;
 import co.astrnt.managersdk.repository.CandidateRepository;
@@ -29,7 +30,7 @@ import timber.log.Timber;
 
 public class ListVideoActivity extends BaseActivity {
 
-    private static final String EXT_JOB_ID = "JOB_ID";
+    private static final String EXT_JOB_DATA = "EXT_JOB_DATA";
     private static final String EXT_CANDIDATE_ID = "CANDIDATE_ID";
     private CandidateRepository mCandidateRepository;
     private RecyclerView recyclerView;
@@ -38,11 +39,12 @@ public class ListVideoActivity extends BaseActivity {
     private ProgressDialog progressDialog;
 
     private List<VideoApiDao> listVideos = new ArrayList<>();
-    private String jobId, candidateId;
+    private JobApiDao jobApiDao;
+    private String candidateId;
 
-    public static void start(Context context, String jobId, String candidateId) {
+    public static void start(Context context, JobApiDao jobApiDao, String candidateId) {
         Intent intent = new Intent(context, ListVideoActivity.class);
-        intent.putExtra(EXT_JOB_ID, jobId);
+        intent.putExtra(EXT_JOB_DATA, jobApiDao);
         intent.putExtra(EXT_CANDIDATE_ID, candidateId);
         context.startActivity(intent);
     }
@@ -68,7 +70,7 @@ public class ListVideoActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(videoAdapter);
 
-        jobId = getIntent().getStringExtra(EXT_JOB_ID);
+        jobApiDao = getIntent().getParcelableExtra(EXT_JOB_DATA);
         candidateId = getIntent().getStringExtra(EXT_CANDIDATE_ID);
 
         fabAdd.setVisibility(View.GONE);
@@ -81,7 +83,7 @@ public class ListVideoActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mCandidateRepository.getListVideos(jobId, candidateId)
+        mCandidateRepository.getListVideos(jobApiDao.getJob_identifier(), candidateId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<ResponseVideoApiDao>() {

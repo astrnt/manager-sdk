@@ -136,10 +136,10 @@ public class DetailJobActivity extends BaseActivity implements View.OnClickListe
                 shareJob();
                 break;
             case R.id.btn_see_candidates:
-                ListCandidateActivity.start(context, jobApiDao.getJob_identifier());
+                ListCandidateActivity.start(context, jobApiDao);
                 break;
             case R.id.btn_see_question:
-                ListQuestionActivity.start(context, jobApiDao.getJob_identifier());
+                ListQuestionActivity.start(context, jobApiDao);
                 break;
         }
     }

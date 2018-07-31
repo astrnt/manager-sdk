@@ -1,16 +1,18 @@
 package co.astrnt.managersdk.dao;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by deni rohimat on 23/07/18
  */
-public class QuestionApiDao {
+public class QuestionApiDao implements Parcelable {
 
     private String title;
     private int takesCount;
     private String prepTime;
     private String maxTime;
     private String question_identifier;
-    private String job_identifier;
 
     public String getTitle() {
         return title;
@@ -52,11 +54,40 @@ public class QuestionApiDao {
         this.question_identifier = question_identifier;
     }
 
-    public String getJob_identifier() {
-        return job_identifier;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setJob_identifier(String job_identifier) {
-        this.job_identifier = job_identifier;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.title);
+        dest.writeInt(this.takesCount);
+        dest.writeString(this.prepTime);
+        dest.writeString(this.maxTime);
+        dest.writeString(this.question_identifier);
     }
+
+    public QuestionApiDao() {
+    }
+
+    protected QuestionApiDao(Parcel in) {
+        this.title = in.readString();
+        this.takesCount = in.readInt();
+        this.prepTime = in.readString();
+        this.maxTime = in.readString();
+        this.question_identifier = in.readString();
+    }
+
+    public static final Creator<QuestionApiDao> CREATOR = new Creator<QuestionApiDao>() {
+        @Override
+        public QuestionApiDao createFromParcel(Parcel source) {
+            return new QuestionApiDao(source);
+        }
+
+        @Override
+        public QuestionApiDao[] newArray(int size) {
+            return new QuestionApiDao[size];
+        }
+    };
 }

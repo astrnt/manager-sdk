@@ -9,16 +9,20 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import co.astrnt.managersdk.dao.JobApiDao;
 import co.astrnt.managersdk.dao.QuestionApiDao;
 import co.astrnt.samplemanagersdk.R;
+import co.astrnt.samplemanagersdk.feature.DetailQuestionActivity;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ExampleViewHolder> {
 
     private List<QuestionApiDao> listData;
+    private JobApiDao jobApiDao;
     private Context context;
 
-    public QuestionAdapter(Context context, List<QuestionApiDao> data) {
+    public QuestionAdapter(Context context, JobApiDao jobApiDao, List<QuestionApiDao> data) {
         this.context = context;
+        this.jobApiDao = jobApiDao;
         listData = data;
     }
 
@@ -59,7 +63,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Exampl
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    TODO: move to job detail
+                    DetailQuestionActivity.start(context, jobApiDao, item);
                 }
             });
         }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import co.astrnt.managersdk.dao.CandidateApiDao;
+import co.astrnt.managersdk.dao.JobApiDao;
 import co.astrnt.samplemanagersdk.R;
 import co.astrnt.samplemanagersdk.feature.ListVideoActivity;
 
@@ -17,11 +18,11 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Exam
 
     private List<CandidateApiDao> listData;
     private Context context;
-    private String jobId;
+    private JobApiDao jobApiDao;
 
-    public CandidateAdapter(Context context, String jobId, List<CandidateApiDao> data) {
+    public CandidateAdapter(Context context, JobApiDao jobApiDao, List<CandidateApiDao> data) {
         this.context = context;
-        this.jobId = jobId;
+        this.jobApiDao = jobApiDao;
         listData = data;
     }
 
@@ -62,7 +63,7 @@ public class CandidateAdapter extends RecyclerView.Adapter<CandidateAdapter.Exam
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ListVideoActivity.start(context, jobId, item.getCandidate_identifier());
+                    ListVideoActivity.start(context, jobApiDao, item.getCandidate_identifier());
                 }
             });
         }

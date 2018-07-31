@@ -12,8 +12,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import co.astrnt.managersdk.core.MyObserver;
-import co.astrnt.managersdk.dao.AddQuestionApiDao;
+import co.astrnt.managersdk.dao.BaseApiDao;
 import co.astrnt.managersdk.dao.JobApiDao;
+import co.astrnt.managersdk.dao.QuestionApiDao;
 import co.astrnt.managersdk.repository.QuestionRepository;
 import co.astrnt.samplemanagersdk.R;
 import co.astrnt.samplemanagersdk.base.BaseActivity;
@@ -21,21 +22,24 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class AddQuestionActivity extends BaseActivity {
+public class UpdateQuestionActivity extends BaseActivity {
 
     private static final String EXT_DATA = "EXT_DATA";
+    private static final String EXT_JOB_DATA = "EXT_JOB_DATA";
     private QuestionRepository mQuestionRepository;
     private EditText inpQuestionTitle, inpTakesCount;
     private Button btnSubmit;
     private ProgressDialog progressDialog;
 
     private JobApiDao jobApiDao;
+    private QuestionApiDao questionApiDao;
     private String questionTitle;
     private int takesCount;
 
-    public static void start(Context context, JobApiDao jobApiDao) {
-        Intent intent = new Intent(context, AddQuestionActivity.class);
-        intent.putExtra(EXT_DATA, jobApiDao);
+    public static void start(Context context, JobApiDao jobApiDao, QuestionApiDao questionApiDao) {
+        Intent intent = new Intent(context, UpdateQuestionActivity.class);
+        intent.putExtra(EXT_JOB_DATA, jobApiDao);
+        intent.putExtra(EXT_DATA, questionApiDao);
         context.startActivity(intent);
     }
 
@@ -43,7 +47,7 @@ public class AddQuestionActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getSupportActionBar().setTitle("Add Question");
+        getSupportActionBar().setTitle("Update Question");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -55,7 +59,10 @@ public class AddQuestionActivity extends BaseActivity {
 
         mQuestionRepository = new QuestionRepository(getApi());
 
-        jobApiDao = getIntent().getParcelableExtra(EXT_DATA);
+        jobApiDao = getIntent().getParcelableExtra(EXT_JOB_DATA);
+        questionApiDao = getIntent().getParcelableExtra(EXT_DATA);
+
+        showInfo();
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +72,10 @@ public class AddQuestionActivity extends BaseActivity {
         });
     }
 
+    private void showInfo() {
+        inpQuestionTitle.setText(questionApiDao.getTitle());
+        inpTakesCount.setText(String.valueOf(questionApiDao.getTakesCount()));
+    }
 
     private void validateInput() {
 
@@ -93,10 +104,10 @@ public class AddQuestionActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mQuestionRepository.addQuestion(jobApiDao.getJob_identifier(), questionTitle, takesCount)
+        mQuestionRepository.editQuestion(jobApiDao.getJob_identifier(), questionApiDao.getQuestion_identifier(), questionTitle, takesCount)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new MyObserver<AddQuestionApiDao>() {
+                .subscribe(new MyObserver<BaseApiDao>() {
                     @Override
                     public void onApiResultCompleted() {
                         progressDialog.dismiss();
@@ -109,10 +120,10 @@ public class AddQuestionActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onApiResultOk(AddQuestionApiDao apiDao) {
+                    public void onApiResultOk(BaseApiDao apiDao) {
                         Timber.d(apiDao.getMessage());
                         Toast.makeText(context,
-                                "Success Add Question, Question id : " + apiDao.getQuestion_identifier(),
+                                "Success Edit Question",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
