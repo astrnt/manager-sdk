@@ -8,6 +8,7 @@ import co.astrnt.managersdk.dao.ApiKeyInfoApiDao;
 import co.astrnt.managersdk.dao.BaseApiDao;
 import co.astrnt.managersdk.dao.DetailQuestionApiDao;
 import co.astrnt.managersdk.dao.ListCandidateApiDao;
+import co.astrnt.managersdk.dao.ListCompanyApiDao;
 import co.astrnt.managersdk.dao.ListIndustryApiDao;
 import co.astrnt.managersdk.dao.ListJobApiDao;
 import co.astrnt.managersdk.dao.ListJobTypeApiDao;
@@ -82,5 +83,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("job_list_delete_question")
     Observable<BaseApiDao> deleteQuestion(@FieldMap HashMap<String, String> data);
+
+    //    COMPANY
+    @FormUrlEncoded
+    @POST("job_list_get_list_company")
+    Observable<ListCompanyApiDao> listCompany(@FieldMap HashMap<String, String> data);
 
 }
