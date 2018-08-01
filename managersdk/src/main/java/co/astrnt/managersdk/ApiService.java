@@ -12,6 +12,7 @@ import co.astrnt.managersdk.dao.ListCompanyApiDao;
 import co.astrnt.managersdk.dao.ListIndustryApiDao;
 import co.astrnt.managersdk.dao.ListJobApiDao;
 import co.astrnt.managersdk.dao.ListJobTypeApiDao;
+import co.astrnt.managersdk.dao.ListNotificationApiDao;
 import co.astrnt.managersdk.dao.ListQuestionApiDao;
 import co.astrnt.managersdk.dao.ResponseVideoApiDao;
 import io.reactivex.Observable;
@@ -88,5 +89,9 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("job_list_get_list_company")
     Observable<ListCompanyApiDao> listCompany(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("job_list_get_notification")
+    Observable<ListNotificationApiDao> listNotification(@FieldMap HashMap<String, String> data);
 
 }
