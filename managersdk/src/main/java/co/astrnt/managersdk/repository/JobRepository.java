@@ -2,7 +2,7 @@ package co.astrnt.managersdk.repository;
 
 import java.util.HashMap;
 
-import co.astrnt.managersdk.core.AstronautApi;
+import co.astrnt.managersdk.core.ManagerApi;
 import co.astrnt.managersdk.dao.AddJobApiDao;
 import co.astrnt.managersdk.dao.ApiKeyInfoApiDao;
 import co.astrnt.managersdk.dao.BaseApiDao;
@@ -15,10 +15,10 @@ import io.reactivex.Observable;
  * Created by deni rohimat on 23/07/18
  */
 public class JobRepository extends BaseRepository {
-    private final AstronautApi mAstronautApi;
+    private final ManagerApi mManagerApi;
 
-    public JobRepository(AstronautApi astronautApi) {
-        mAstronautApi = astronautApi;
+    public JobRepository(ManagerApi managerApi) {
+        mManagerApi = managerApi;
     }
 
     public Observable<ApiKeyInfoApiDao> getCompanyInfo() {
@@ -26,7 +26,7 @@ public class JobRepository extends BaseRepository {
         HashMap<String, String> map = new HashMap<>();
         map.put("api_key", managerSDK.getApiKey());
 
-        return mAstronautApi.getApiService().companyInfo(map);
+        return mManagerApi.getApiService().companyInfo(map);
     }
 
     public Observable<AddJobApiDao> createJob(
@@ -51,7 +51,7 @@ public class JobRepository extends BaseRepository {
         map.put("logo_url", logo_url);
         map.put("company_name", company_name);
 
-        return mAstronautApi.getApiService().createJob(map);
+        return mManagerApi.getApiService().createJob(map);
     }
 
     public Observable<BaseApiDao> editJob(String jobId, String title) {
@@ -61,7 +61,7 @@ public class JobRepository extends BaseRepository {
         map.put("job_identifier", jobId);
         map.put("title", title);
 
-        return mAstronautApi.getApiService().editJob(map);
+        return mManagerApi.getApiService().editJob(map);
     }
 
     public Observable<BaseApiDao> deleteJob(String jobId) {
@@ -70,7 +70,7 @@ public class JobRepository extends BaseRepository {
         map.put("api_key", managerSDK.getApiKey());
         map.put("job_identifier", jobId);
 
-        return mAstronautApi.getApiService().deleteJob(map);
+        return mManagerApi.getApiService().deleteJob(map);
     }
 
     public Observable<ListJobApiDao> getListJob() {
@@ -78,7 +78,7 @@ public class JobRepository extends BaseRepository {
         HashMap<String, String> map = new HashMap<>();
         map.put("api_key", managerSDK.getApiKey());
 
-        return mAstronautApi.getApiService().listJob(map);
+        return mManagerApi.getApiService().listJob(map);
     }
 
     public Observable<ListJobApiDao> getListJobByCompany(String companyId) {
@@ -87,7 +87,7 @@ public class JobRepository extends BaseRepository {
         map.put("api_key", managerSDK.getApiKey());
         map.put("company_identifier", companyId);
 
-        return mAstronautApi.getApiService().listJob(map);
+        return mManagerApi.getApiService().listJob(map);
     }
 
     public Observable<ListJobApiDao> getJobDetail(String jobId) {
@@ -96,14 +96,14 @@ public class JobRepository extends BaseRepository {
         map.put("api_key", managerSDK.getApiKey());
         map.put("job_identifier", jobId);
 
-        return mAstronautApi.getApiService().listJob(map);
+        return mManagerApi.getApiService().listJob(map);
     }
 
     public Observable<ListJobTypeApiDao> getJobTypes() {
-        return mAstronautApi.getApiService().jobTypes();
+        return mManagerApi.getApiService().jobTypes();
     }
 
     public Observable<ListIndustryApiDao> getListIndustry() {
-        return mAstronautApi.getApiService().listIndustry();
+        return mManagerApi.getApiService().listIndustry();
     }
 }

@@ -24,7 +24,7 @@ import retrofit2.http.POST;
 /**
  * Created by deni rohimat on 23/07/18
  */
-public interface ApiService {
+public interface ManagerApiService {
 
     //    COMPANY INFO
     @FormUrlEncoded

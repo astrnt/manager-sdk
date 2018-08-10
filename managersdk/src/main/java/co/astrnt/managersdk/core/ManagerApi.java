@@ -3,7 +3,7 @@ package co.astrnt.managersdk.core;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import co.astrnt.managersdk.ApiService;
+import co.astrnt.managersdk.ManagerApiService;
 import io.reactivex.annotations.NonNull;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -17,11 +17,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by deni rohimat on 23/07/18
  */
-public class AstronautApi {
+public class ManagerApi {
 
-    private ApiService mApiService;
+    private ManagerApiService mManagerApiService;
 
-    public AstronautApi(String baseUrl, boolean isDebugable) {
+    public ManagerApi(String baseUrl, boolean isDebugable) {
 
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         httpClientBuilder.readTimeout(60, TimeUnit.SECONDS);
@@ -50,11 +50,11 @@ public class AstronautApi {
                 .baseUrl(baseUrl)
                 .build();
 
-        mApiService = retrofit.create(ApiService.class);
+        mManagerApiService = retrofit.create(ManagerApiService.class);
     }
 
-    public ApiService getApiService() {
-        return mApiService;
+    public ManagerApiService getApiService() {
+        return mManagerApiService;
     }
 
 }

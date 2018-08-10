@@ -7,14 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import co.astrnt.managersdk.ManagerSDK;
-import co.astrnt.managersdk.core.AstronautApi;
+import co.astrnt.managersdk.core.ManagerApi;
 import co.astrnt.samplemanagersdk.AstronautApp;
 
 public class BaseActivity extends AppCompatActivity {
     protected Context context = this;
     protected ManagerSDK managerSDK;
 
-    public static AstronautApi getApi() {
+    public static ManagerApi getApi() {
         return AstronautApp.getApi();
     }
 

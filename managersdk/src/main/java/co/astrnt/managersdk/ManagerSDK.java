@@ -2,7 +2,7 @@ package co.astrnt.managersdk;
 
 import android.content.Context;
 
-import co.astrnt.managersdk.core.AstronautApi;
+import co.astrnt.managersdk.core.ManagerApi;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import timber.log.Timber;
@@ -12,7 +12,7 @@ public class ManagerSDK {
     private static final String DB_NAME = "astrntmanagerdb";
     private static final int DB_VERSION = 1;
 
-    private static AstronautApi mAstronautApi;
+    private static ManagerApi mManagerApi;
     private static String mApiUrl;
     private static String mApiKey;
     private Realm realm;
@@ -58,11 +58,11 @@ public class ManagerSDK {
         return mApiKey;
     }
 
-    public AstronautApi getApi() {
-        if (mAstronautApi == null) {
-            mAstronautApi = new AstronautApi(mApiUrl, isDebuggable);
+    public ManagerApi getApi() {
+        if (mManagerApi == null) {
+            mManagerApi = new ManagerApi(mApiUrl, isDebuggable);
         }
-        return mAstronautApi;
+        return mManagerApi;
     }
 
 }

@@ -3,13 +3,13 @@ package co.astrnt.samplemanagersdk;
 import android.app.Application;
 
 import co.astrnt.managersdk.ManagerSDK;
-import co.astrnt.managersdk.core.AstronautApi;
+import co.astrnt.managersdk.core.ManagerApi;
 
 public class AstronautApp extends Application {
 
     private static ManagerSDK astrntSDK;
 
-    public static AstronautApi getApi() {
+    public static ManagerApi getApi() {
         return astrntSDK.getApi();
     }
 
