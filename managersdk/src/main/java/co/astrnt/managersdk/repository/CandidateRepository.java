@@ -12,11 +12,9 @@ import io.reactivex.Observable;
  */
 public class CandidateRepository extends BaseRepository {
     private final AstronautApi mAstronautApi;
-    private final QuestionRepository mQuestionRepository;
 
     public CandidateRepository(AstronautApi astronautApi) {
         mAstronautApi = astronautApi;
-        mQuestionRepository = new QuestionRepository(mAstronautApi);
     }
 
     public Observable<ListCandidateApiDao> getListCandidate(String jobId) {
@@ -28,6 +26,14 @@ public class CandidateRepository extends BaseRepository {
         return mAstronautApi.getApiService().listCandidate(map);
     }
 
+    public Observable<ResponseVideoApiDao> getListVideos(String jobId, String candidateId, String questionId) {
+        if (candidateId == null) {
+            return getListQuestionVideos(jobId, questionId);
+        } else {
+            return getListVideos(jobId, candidateId);
+        }
+    }
+
     public Observable<ResponseVideoApiDao> getListVideos(String jobId, String candidateId) {
 
         HashMap<String, String> map = new HashMap<>();
@@ -36,6 +42,16 @@ public class CandidateRepository extends BaseRepository {
         map.put("candidate_identifier", candidateId);
 
         return mAstronautApi.getApiService().listVideos(map);
+    }
+
+    public Observable<ResponseVideoApiDao> getListQuestionVideos(String jobId, String questionId) {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("api_key", managerSDK.getApiKey());
+        map.put("job_identifier", jobId);
+        map.put("question_identifier", questionId);
+
+        return mAstronautApi.getApiService().listQuestionVideos(map);
     }
 
 }

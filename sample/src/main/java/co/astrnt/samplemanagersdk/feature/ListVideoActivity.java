@@ -18,6 +18,7 @@ import java.util.List;
 
 import co.astrnt.managersdk.core.MyObserver;
 import co.astrnt.managersdk.dao.JobApiDao;
+import co.astrnt.managersdk.dao.QuestionApiDao;
 import co.astrnt.managersdk.dao.ResponseVideoApiDao;
 import co.astrnt.managersdk.dao.VideoApiDao;
 import co.astrnt.managersdk.repository.CandidateRepository;
@@ -32,6 +33,7 @@ public class ListVideoActivity extends BaseActivity {
 
     private static final String EXT_JOB_DATA = "EXT_JOB_DATA";
     private static final String EXT_CANDIDATE_ID = "CANDIDATE_ID";
+    private static final String EXT_QUESTION_DATA = "QUESTION_ID";
     private CandidateRepository mCandidateRepository;
     private RecyclerView recyclerView;
     private FloatingActionButton fabAdd;
@@ -40,12 +42,20 @@ public class ListVideoActivity extends BaseActivity {
 
     private List<VideoApiDao> listVideos = new ArrayList<>();
     private JobApiDao jobApiDao;
+    private QuestionApiDao questionApiDao;
     private String candidateId;
 
     public static void start(Context context, JobApiDao jobApiDao, String candidateId) {
         Intent intent = new Intent(context, ListVideoActivity.class);
         intent.putExtra(EXT_JOB_DATA, jobApiDao);
         intent.putExtra(EXT_CANDIDATE_ID, candidateId);
+        context.startActivity(intent);
+    }
+
+    public static void startFromQuestion(Context context, JobApiDao jobApiDao, QuestionApiDao question) {
+        Intent intent = new Intent(context, ListVideoActivity.class);
+        intent.putExtra(EXT_JOB_DATA, jobApiDao);
+        intent.putExtra(EXT_QUESTION_DATA, question);
         context.startActivity(intent);
     }
 
@@ -72,6 +82,9 @@ public class ListVideoActivity extends BaseActivity {
 
         jobApiDao = getIntent().getParcelableExtra(EXT_JOB_DATA);
         candidateId = getIntent().getStringExtra(EXT_CANDIDATE_ID);
+        if (candidateId == null) {
+            questionApiDao = getIntent().getParcelableExtra(EXT_QUESTION_DATA);
+        }
 
         fabAdd.setVisibility(View.GONE);
         getData();
@@ -83,7 +96,7 @@ public class ListVideoActivity extends BaseActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        mCandidateRepository.getListVideos(jobApiDao.getJob_identifier(), candidateId)
+        mCandidateRepository.getListVideos(jobApiDao.getJob_identifier(), candidateId, questionApiDao.getQuestion_identifier())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MyObserver<ResponseVideoApiDao>() {

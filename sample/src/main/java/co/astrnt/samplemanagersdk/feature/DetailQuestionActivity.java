@@ -30,7 +30,7 @@ public class DetailQuestionActivity extends BaseActivity implements View.OnClick
     private ProgressDialog progressDialog;
 
     private TextView txtTitle, txtTakesCount;
-    private Button btnDeleteJob, btnUpdateJob;
+    private Button btnSeeVideos, btnDeleteJob, btnUpdateJob;
     private QuestionApiDao questionApiDao;
     private JobApiDao jobApiDao;
 
@@ -54,6 +54,7 @@ public class DetailQuestionActivity extends BaseActivity implements View.OnClick
         txtTitle = findViewById(R.id.txt_question_title);
         txtTakesCount = findViewById(R.id.txt_takes_and_max_time);
 
+        btnSeeVideos = findViewById(R.id.btn_see_videos);
         btnUpdateJob = findViewById(R.id.btn_update);
         btnDeleteJob = findViewById(R.id.btn_delete);
 
@@ -63,6 +64,7 @@ public class DetailQuestionActivity extends BaseActivity implements View.OnClick
 
         showInfo();
 
+        btnSeeVideos.setOnClickListener(this);
         btnUpdateJob.setOnClickListener(this);
         btnDeleteJob.setOnClickListener(this);
     }
@@ -105,6 +107,9 @@ public class DetailQuestionActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.btn_see_videos:
+                ListVideoActivity.startFromQuestion(context, jobApiDao, questionApiDao);
+                break;
             case R.id.btn_update:
                 UpdateQuestionActivity.start(context, jobApiDao, questionApiDao);
                 break;

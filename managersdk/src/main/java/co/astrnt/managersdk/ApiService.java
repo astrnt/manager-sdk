@@ -64,6 +64,10 @@ public interface ApiService {
     @POST("job_list_get_videos_with_attribute")
     Observable<ResponseVideoApiDao> listVideos(@FieldMap HashMap<String, String> data);
 
+    @FormUrlEncoded
+    @POST("job_list_get_questions_videos")
+    Observable<ResponseVideoApiDao> listQuestionVideos(@FieldMap HashMap<String, String> data);
+
     //    QUESTION
     @FormUrlEncoded
     @POST("job_list_questions_list")

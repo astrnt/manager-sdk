@@ -22,19 +22,33 @@
         tools:text="Question Attempt"/>
 
     <Button
-        android:id="@+id/btn_update"
+        android:id="@+id/btn_see_videos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/spaces_triple"
-        android:text="Update This Question"/>
+        android:text="See Videos"/>
 
-    <Button
-        android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/spaces_normal"
-        android:text="Delete This Question"/>
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Update This Question"/>
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="Delete This Question"/>
+    </LinearLayout>
 </LinearLayout>

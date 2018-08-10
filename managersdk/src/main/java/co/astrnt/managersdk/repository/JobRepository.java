@@ -81,6 +81,24 @@ public class JobRepository extends BaseRepository {
         return mAstronautApi.getApiService().listJob(map);
     }
 
+    public Observable<ListJobApiDao> getListJobByCompany(String companyId) {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("api_key", managerSDK.getApiKey());
+        map.put("company_identifier", companyId);
+
+        return mAstronautApi.getApiService().listJob(map);
+    }
+
+    public Observable<ListJobApiDao> getJobDetail(String jobId) {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("api_key", managerSDK.getApiKey());
+        map.put("job_identifier", jobId);
+
+        return mAstronautApi.getApiService().listJob(map);
+    }
+
     public Observable<ListJobTypeApiDao> getJobTypes() {
         return mAstronautApi.getApiService().jobTypes();
     }
