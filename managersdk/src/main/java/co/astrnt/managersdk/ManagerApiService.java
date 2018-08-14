@@ -14,6 +14,7 @@ import co.astrnt.managersdk.dao.ListJobApiDao;
 import co.astrnt.managersdk.dao.ListJobTypeApiDao;
 import co.astrnt.managersdk.dao.ListNotificationApiDao;
 import co.astrnt.managersdk.dao.ListQuestionApiDao;
+import co.astrnt.managersdk.dao.LoginApiDao;
 import co.astrnt.managersdk.dao.ResponseVideoApiDao;
 import io.reactivex.Observable;
 import retrofit2.http.FieldMap;
@@ -90,6 +91,10 @@ public interface ManagerApiService {
     Observable<BaseApiDao> deleteQuestion(@FieldMap HashMap<String, String> data);
 
     //    COMPANY
+    @FormUrlEncoded
+    @POST("astronaut/integration/login")
+    Observable<LoginApiDao> getApiKey(@FieldMap HashMap<String, String> data);
+
     @FormUrlEncoded
     @POST("job_list_get_list_company")
     Observable<ListCompanyApiDao> listCompany(@FieldMap HashMap<String, String> data);

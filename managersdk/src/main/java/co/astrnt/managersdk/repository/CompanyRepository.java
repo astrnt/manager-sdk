@@ -5,6 +5,7 @@ import java.util.HashMap;
 import co.astrnt.managersdk.core.ManagerApi;
 import co.astrnt.managersdk.dao.ListCompanyApiDao;
 import co.astrnt.managersdk.dao.ListNotificationApiDao;
+import co.astrnt.managersdk.dao.LoginApiDao;
 import io.reactivex.Observable;
 
 /**
@@ -15,6 +16,15 @@ public class CompanyRepository extends BaseRepository {
 
     public CompanyRepository(ManagerApi managerApi) {
         mManagerApi = managerApi;
+    }
+
+    public Observable<LoginApiDao> getApiKey(String email, String password) {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("email", email);
+        map.put("password", password);
+
+        return mManagerApi.getApiService().getApiKey(map);
     }
 
     public Observable<ListCompanyApiDao> getListCompany() {

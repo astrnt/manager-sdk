@@ -21,7 +21,7 @@ public class AstronautApp extends Application {
 
     private void setUpSDK() {
         if (astrntSDK == null) {
-            astrntSDK = new ManagerSDK(this, BuildConfig.API_URL, BuildConfig.DEBUG, BuildConfig.API_KEY);
+            astrntSDK = new ManagerSDK(this, BuildConfig.API_URL, BuildConfig.DEBUG);
         }
     }
 }

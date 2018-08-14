@@ -18,9 +18,8 @@ public class ManagerSDK {
     private Realm realm;
     private boolean isDebuggable;
 
-    public ManagerSDK(Context context, String apiUrl, boolean debug, String apiKey) {
+    public ManagerSDK(Context context, String apiUrl, boolean debug) {
         mApiUrl = apiUrl;
-        mApiKey = apiKey;
         isDebuggable = debug;
 
         if (debug) {
@@ -56,6 +55,10 @@ public class ManagerSDK {
 
     public String getApiKey() {
         return mApiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        ManagerSDK.mApiKey = apiKey;
     }
 
     public ManagerApi getApi() {
